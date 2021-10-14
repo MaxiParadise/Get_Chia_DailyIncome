@@ -40,8 +40,8 @@ for i in range(len(lines)):
                         print(md.groups()[0]+md.groups()[1])
                         print(mw.groups()[0])
                         print(ma.groups()[0])
-                        xch_count[inx] += float(ma.groups()[0])
-                        xch_total += float(ma.groups()[0])
+                        xch_count[inx] += float(ma.groups()[0]) # 昨日の支払先アドレスごとの入金値集計
+                        xch_total += float(ma.groups()[0]) # 昨日の入金値集計
                         break
 
 # 抽出結果をcsvに追記
