@@ -5,6 +5,8 @@ Chia BlockchainがインストールされたPCで、
 `chia.exe wallet get_transactions` の出力を利用して、  
 昨日の入金データを集計するスクリプト
 
+↓詳細はこちらの記事で書いています  
+https://maxigundan.com/monetize/?p=424  
 
 ## 事前準備
 get_chia_income.py を開き、以下の2つの設定を行ってください  
