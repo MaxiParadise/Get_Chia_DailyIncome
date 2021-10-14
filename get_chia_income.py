@@ -30,7 +30,7 @@ for i in range(len(lines)):
     m = re.match(r'^Transaction [0-9a-f]{64}$', lines[i])
     if m != None:
         if lines[i+1] == 'Status: Confirmed':
-            ma = re.match(r'^Amount: (.+) xch$', lines[i+2])
+            ma = re.match(r'^Amount received: (.+) xch$', lines[i+2])
             mw = re.match(r'^To address: (.+)$', lines[i+3])
             md = re.match(r'^Created at: (.+)( [0-9]{2}:[0-9]{2}:[0-9]{2})$', lines[i+4])
             if md.groups()[0] == yesterday:
