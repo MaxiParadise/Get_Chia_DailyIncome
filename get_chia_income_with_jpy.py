@@ -1,6 +1,29 @@
 import subprocess
 import re
 import datetime
+from bs4 import BeautifulSoup
+import urllib
+from urllib.request import urlopen
+
+headers = {
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
+}
+
+def get_xch_to_usdt():
+    url_to_usdt="https://www.gate.io/ja/trade/XCH_USDT"
+    request = urllib.request.Request(url_to_usdt, headers=headers)
+    res_usdt = urlopen(request)
+    soup_usdt = BeautifulSoup(res_usdt, 'html.parser')
+    xch_to_usdt = soup_usdt.select("#currPrice")[0].string
+    return float(xch_to_usdt)
+
+def get_usd_to_jpy():
+    url_to_jpy="https://stocks.finance.yahoo.co.jp/stocks/detail/?code=usdjpy"
+    res_jpy = urlopen(url_to_jpy)
+    soup_jpy = BeautifulSoup(res_jpy, 'html.parser')
+    usd_to_jpy = soup_jpy.select_one(".stoksPrice").string
+    return float(usd_to_jpy)
+
 
 # chia-blockchainのバージョン設定
 ver_str = '1.2.9'
@@ -44,16 +67,23 @@ for i in range(len(lines)):
                         xch_total += float(ma.groups()[0])
                         break
 
+#XCH/USDT USD/JPY取得
+xch_to_usdt = get_xch_to_usdt()
+usd_to_jpy = get_usd_to_jpy()
+jpy = xch_total * xch_to_usdt * usd_to_jpy
 print('xch_total  =', xch_total)
+print('xch_to_usdt=', xch_to_usdt)
+print('usd_to_jpy =', usd_to_jpy)
+print('jpy        =', jpy)
 
 # 抽出結果をcsvに追記
 print('Writing csv')
 
 copy_str = yesterday
 copy_str += '\t'+'\t'.join(list(map(str,xch_count)))
-copy_str += '\t'+str(xch_total)
+copy_str += '\t'+str(xch_total)+'\t'+str(xch_to_usdt)+'\t'+str(usd_to_jpy)+'\t'+str(jpy)
 
-with open('chia_wallet_daily.csv', 'a') as f:
+with open('chia_wallet_daily_with_jpy.csv', 'a') as f:
     print(copy_str, file=f)
 
 
